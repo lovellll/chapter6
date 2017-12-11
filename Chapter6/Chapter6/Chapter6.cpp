@@ -1,49 +1,37 @@
-// Chapter6.cpp : 定义控制台应用程序的入口点。
-//
-
 #include "stdafx.h"
+#include <utility> // for std::swap, use <utility> instead if C++11
 #include <iostream>
-
-int getInputNumber()
-{
-	
-	while (true)
-	{
-		std::cout << "please input a number of 1~9\n";
-		int x;
-		std::cin >> x;
-		if (std::cin.fail())
-		{
-			std::cin.clear();
-			std::cin.ignore(32767, '\n');
-			std::cout << "oops,please input again\n";
-
-		}
-		else
-		{
-			std::cin.ignore(32767, '\n');
-			if (x >= 1 && x <= 9)
-				return x;
-			else
-				std::cout << "oops, please input again\n";
-		}
-
-	}
-}
-
-void searchArry(int input, int array[], int arrayNumber)
-{
-	for (int i = 0; i < arrayNumber; ++i)
-		if (input == array[i])
-			std::cout << "the Index of " << input << " is " << i << "\n";
-}
 
 int main()
 {
-	int array[]{ 4, 6, 7, 3, 8, 2, 1, 9, 5 };
-	int arrayNumber = sizeof(array) / sizeof(array[0]);
-	int input = getInputNumber();
-	searchArry(input,array,arrayNumber);
+	const int length = 5;
+	int array[length] = { 30, 50, 20, 10, 40 };
+
+	// Step through each element of the array
+	// (except the last one, which will already be sorted by the time we get there)
+	for (int startIndex = 0; startIndex < length - 1; ++startIndex)
+	{
+		// smallestIndex is the index of the smallest element we’ve encountered this iteration
+		// Start by assuming the smallest element is the first element of this iteration
+		int biggestIndex = startIndex;
+
+		// Then look for a smaller element in the rest of the array
+		for (int currentIndex = startIndex + 1; currentIndex < length; ++currentIndex)
+		{
+			// If we've found an element that is smaller than our previously found smallest
+			if (array[currentIndex] > array[biggestIndex])
+				// then keep track of it
+				biggestIndex = currentIndex;
+		}
+
+		// smallestIndex is now the smallest element in the remaining array
+		// swap our start element with our smallest element (this sorts it into the correct place)
+		std::swap(array[startIndex], array[biggestIndex]);
+	}
+
+	// Now that the whole array is sorted, print our sorted array as proof it works
+	for (int index = 0; index < length; ++index)
+		std::cout << array[index] << ' ';
+
 	return 0;
 }
-
